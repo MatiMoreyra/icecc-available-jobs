@@ -2,8 +2,6 @@
 Simple bash script that queries icecream scheduler to discover the available job count in the network.
 ## Usage:
 ```
-icecc-jobs.sh <scheduler-host-address>
+icecc-jobs.sh [PORT]
 ```
-
-## TODO:
-  - Try to automatically discover scheduler address.
+`PORT` is dafaulted to 8766 if not given.
