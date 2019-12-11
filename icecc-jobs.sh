@@ -61,7 +61,12 @@ if test -z $SCHEDULER; then
 fi
 
 # Ask the scheduler for remote nodes info
-INFO=$(nc $SCHEDULER $PORT <<< "listcs")
+INFO=$(nc $SCHEDULER $PORT -w 5 <<< "listcs")
+
+if test -z $INFO; then
+    echo "Ups! The scheduler is not responding."
+    exit 1
+fi
 
 # Example node info:
 # MatiLaptop (xx.xxx.x.xxx:xxxx) [x86_64] speed=420.00 jobs=0/8 load=218
