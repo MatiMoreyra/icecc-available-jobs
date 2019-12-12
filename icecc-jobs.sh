@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script that queries the number of available jobs on icecc.
-# Usage: icecc-jobs.sh [PORT]
+# Usage: icecc-jobs.sh [--help] [-p | --port <port>] [-s | --scheduler <scheduler>]
 
 # Set default arguments
 PORT=8766           # icecc-scheduler port
