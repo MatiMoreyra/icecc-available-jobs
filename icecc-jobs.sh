@@ -18,6 +18,17 @@ while [ "$1" != "" ]; do
     shift
 done
 
+function print_help {
+    echo -e "\n"\
+        "Script that queries the number of available jobs on icecc.\n\n"\
+        "Usage: icecc-jobs.sh [--help] [-p | --port <port>] [-s | --scheduler <scheduler>]\n\n"\
+        "-h | --help: show this help.\n"\
+        "-p | --port <port>: icecc-scheduler port, defaults to 8766.\n"\
+        "-s | --scheduler <scheduler>: scheduler host address, allows to skip network scan (faster result).\n\n"\
+        "If the scheduler address is not specified, the script will scan over all available networks.\n"\
+        "The first computer found with icecc-scheduler port open will be considered to be the scheduler.\n"
+}
+
 function discover_scheduler {
     # We asume that's the port where the icecc-scheduler is running on port $PORT.
     # We also assume that no other machine has that port open.
@@ -38,17 +49,6 @@ function discover_scheduler {
     echo "Well...this is embarrassing. No scheduler found for you"
     exit 1
     fi
-}
-
-function print_help {
-    echo -e "\n"\
-        "Script that queries the number of available jobs on icecc.\n\n"\
-        "Usage: icecc-jobs.sh [--help] [-p | --port <port>] [-s | --scheduler <scheduler>]\n\n"\
-        "-h | --help: show this help.\n"\
-        "-p | --port <port>: icecc-scheduler port, defaults to 8766.\n"\
-        "-s | --scheduler <scheduler>: scheduler host address, allows to skip network scan (faster result).\n\n"\
-        "If the scheduler address is not specified, the script will scan over all available networks.\n"\
-        "The first computer found with icecc-scheduler port open will be considered to be the scheduler.\n"
 }
 
 if $PRINT_HELP; then
