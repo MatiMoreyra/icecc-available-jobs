@@ -63,7 +63,7 @@ fi
 # Ask the scheduler for remote nodes info
 INFO=$(nc $SCHEDULER $PORT -w 5 <<< "listcs")
 
-if test -z $INFO; then
+if [[ -z $INFO ]]; then
     echo "Ups! The scheduler is not responding."
     exit 1
 fi
