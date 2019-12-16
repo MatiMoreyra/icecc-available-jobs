@@ -29,13 +29,13 @@ function print_help {
         "The first computer found with icecc-scheduler port open will be considered to be the scheduler.\n"
 }
 
-function discover_scheduler {
+function discover_schedulers {
     # We asume that's the port where the icecc-scheduler is running on port $PORT.
     # We also assume that no other machine has that port open.
     #
     # Ask (nicely) to all the machines connected to all networks we are a part of, if they have port $PORT open.
     for BROADCAST in `ip -o -f inet addr show | awk '/scope global/ {print $4}'`;do
-        SCHEDULER=`nmap --open -Pn ${BROADCAST} -p${PORT} | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+        SCHEDULER_LIST=(`nmap --open -Pn ${BROADCAST} -p${PORT} | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`)
         # You've got to ask yourself one question. Do I fell lucky? Well, do ya, punk?
         RET=$?
 
@@ -45,9 +45,9 @@ function discover_scheduler {
         fi
     done
 
-    if test -z $SCHEDULER; then
-    echo "Well...this is embarrassing. No scheduler found for you"
-    exit 1
+    if test -z $SCHEDULER_LIST; then
+        echo "Well...this is embarrassing. No scheduler found for you"
+        exit 1
     fi
 }
 
@@ -57,7 +57,17 @@ if $PRINT_HELP; then
 fi
 
 if test -z $SCHEDULER; then
-    discover_scheduler
+    discover_schedulers
+    if [ "${#SCHEDULER_LIST[@]}" -gt 1 ]; then
+        echo "Multiple schedulers found:"
+        for S in "${SCHEDULER_LIST[@]}"
+        do
+            echo $S
+        done
+        echo "Please specify which to query using the -s <scheduler> option"
+        exit 1
+    fi
+    SCHEDULER=${SCHEDULER_LIST[0]}
 fi
 
 # Ask the scheduler for remote nodes info
